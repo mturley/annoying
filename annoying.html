@@ -25,8 +25,8 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <!--<li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>-->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -40,30 +40,49 @@
               </ul>
             </li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
+          <ul class="nav navbar-nav navbar-right">
+            {{ loginButtons }}
+          </ul>
         </div><!--/.navbar-collapse -->
       </div>
     </div>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-      </div>
-    </div>
+    {{#unless loggedIn}} <!-- Logged out UI -->
 
-    <div class="container">
-      <!-- Example row of columns -->
+      <div class="jumbotron"> 
+        <div class="container">
+          <h1>Welcome!</h1>
+          <p>
+            Please log in using SoundCloud to continue.  Soundcloud is required for this app.
+          <p>
+            Use the Sign In / Up dropdown in the upper right.
+          </p>
+        </div>
+      </div>
+
+    {{else}} <!-- Logged in UI -->
+
+      {{#if hasActiveSequence}}
+
+        <div class="jumbotron">
+          <div class="container">
+            <h1>Sequence ID {{activeSequenceId}}</h1>
+            <p>TODO: edit this sequence</p>
+          </div>
+        </div>
+
+      {{else}} <!-- no active sequence -->
+        <div class="jumbotron">
+          <div class="container">
+            <h1>No Sequences Here</h1>
+            <p>You must be new here!  Create a sequence to start recording.</p>
+            <p><a class="btn btn-primary btn-lg create-sequence">Create your First Sequence &raquo;</a></p>
+          </div>
+        </div>
+      {{/if}}
+    {{/unless}}
+<!--
+    <div class="container"> 
       <div class="row">
         <div class="col-lg-4">
           <h2>Heading</h2>
@@ -81,23 +100,14 @@
           <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
         </div>
       </div>
-
+-->
       <hr>
 
-      <footer>
+      <!--<footer>
         <p>This project is hosted on GitHub: {{githubURL}}</p>
-      </footer>
+      </footer>-->
     </div> <!-- /container -->
 </template>
 
 
 <!-- BODY TEMPLATE ABOVE, OTHER TEMPLATES BELOW -->
-
-
-<template name="hello">
-  <h1>Hello World!</h1>
-  {{greeting}}
-  <input type="button" value="Click" />
-
-  {{loginButtons}}
-</template>
