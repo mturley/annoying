@@ -1,4 +1,13 @@
-// TODO put collections here (equiv to tables)
+LOCAL_SC = {
+  clientID : "aa5c695a840b746033696f1739ec7adc",
+  redirectURI : "http://localhost:3000/_oauth/soundcloud?close"
+};
+DEPLOYED_SC = {
+  clientID : "e42173a435159aca42ca9fe01fc40bc4",
+  redirectURI : "http://luper.meteor.com/_oauth/soundcloud?close"
+};
+
+SC_CREDS = LOCAL_SC;
 
 Data = {
   Sequences : new Meteor.Collection("Sequences"),
@@ -9,6 +18,12 @@ Data = {
   },
   getActiveSequence : function() {
     return Data.Sequences.findOne(State.getActiveSequenceId());
+  },
+  Clips : new Meteor.Collection("Clips"),
+  newClip : function(soundcloudParamsTODO) {
+    return {
+
+    };
   }
 };
 
@@ -32,6 +47,44 @@ State = {
 
 if (Meteor.isClient) {
 
+  if(document.location.href.indexOf("meteor") != -1) SC_CREDS = DEPLOYED_SC;
+
+  Meteor.startup(function() {
+    Session.set('recording', false);
+    Session.set('recorderStatusText', "Not Recording");
+  });
+
+  Recorder = {
+    recordNewClip : function() {
+      //SC.connect(function() { // maybe don't need this?
+      if(Soundcloud.ready()) {
+        Session.set('recording', true);
+        Session.set('recorderStatusText', "Please Wait...");
+        SC.record({
+          start: function() {
+            window.setTimeout(function() {
+              SC.recordStop();
+              SC.recordUpload({
+                track: { title: 'Luper Clip' }
+              });
+            }, 5000);
+          }
+        });
+      }
+      //});
+    },
+    stopRecording : function() {
+      SC.recordStop();
+      Session.set('recording', false);
+      Session.set('recorderStatusText', "Uploading Your Audio...");
+      SC.recordUpload({
+        track: { title: 'Clip Recorded in Luper' }
+      });
+    }
+  };
+
+  /////////  BODY
+
   Template.body.githubURL = "http://github.com/mturley/annoying";
   Template.body.loggedIn = State.loggedIn;
   Template.body.hasActiveSequence = function() {
@@ -42,11 +95,29 @@ if (Meteor.isClient) {
   Template.body.events({
     'click .btn.create-sequence' : function() {
       console.log("Clicked!");
-      var sequenceId = Data.Sequences.insert(Data.NewSequence());
+      var sequenceId = Data.Sequences.insert(Data.newSequence());
       State.setActiveSequenceId(sequenceId);
     }
-  })
+  });
 
+  /////////  EDITOR
+
+  Template.editor.activeSequenceId = State.getActiveSequenceId;
+  Template.editor.recording = function() {
+    return Session.get('recording');
+  }
+  Template.editor.recorderStatus = function() {
+    return Session.get('recorderStatusText');
+  }
+
+  Template.editor.events({
+    'click .btn.start-recording' : function() {
+      Recorder.recordNewClip();
+    },
+    'click .btn.stop-recording' : function() {
+      Recorder.stopRecording();
+    }
+  });
 }
 
 if (Meteor.isServer) {

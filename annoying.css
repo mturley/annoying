@@ -1,2 +1,4 @@
 /* CSS declarations go here */
 
+button:focus { outline: 0 !important; }
+h4.recorder-status { display: inline-block; }
