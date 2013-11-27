@@ -112,9 +112,19 @@
   <div class="jumbotron">
     <div class="container">
       <h1>Sequence ID {{activeSequenceId}}</h1>
-      <p>TODO: edit this sequence</p>
     </div>
   </div>
+  <div class="tracks">
+    {{#each tracks}}
+      <div class="track">
+        Some Track {{_id}} <button class="btn btn-small add-clip" data-track-id="{{_id}}">Add Clip</button>
+        {{#each clips}}
+          <div class="clip" style="left: {{leftPx}}; width: {{widthPx}}px"></div>
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
+  <button class="btn btn-large add-track">Add a Track</button>
   <div class="container">
     <h2>My Clips</h2>
     <button class="btn btn-primary start-recording"{{#if recording}} disabled="disabled"{{/if}}>Record New Clip</button>

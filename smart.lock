@@ -4,7 +4,8 @@
     "basePackages": {
       "bootstrap-3": {},
       "accounts-ui-bootstrap-3": {},
-      "accounts-soundcloud": {}
+      "accounts-soundcloud": {},
+      "jqueryui": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -21,6 +22,11 @@
         "git": "https://github.com/sylvaingi/meteor-accounts-soundcloud.git",
         "tag": "v0.1.2",
         "commit": "962879b116bdb107752fc1381d0e840f802e00ca"
+      },
+      "jqueryui": {
+        "git": "https://github.com/mizzao/meteor-jqueryui.git",
+        "tag": "v1.10.3",
+        "commit": "c1c44a17c2e2d92e206dc4ecbaad0b83272de85c"
       },
       "soundcloud": {
         "git": "https://github.com/sylvaingi/meteor-soundcloud.git",

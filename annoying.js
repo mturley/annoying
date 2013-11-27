@@ -19,12 +19,22 @@ Data = {
   getActiveSequence : function() {
     return Data.Sequences.findOne(State.getActiveSequenceId());
   },
-  Clips : new Meteor.Collection("Clips"),
-  newClip : function(soundcloudParamsTODO) {
-    return {
 
+  Tracks : new Meteor.Collection("Tracks"),
+  newTrack : function(sequenceId) {
+    return {
+      parentSequenceId : sequenceId
     };
-  }
+  },
+
+  Clips : new Meteor.Collection("Clips"),
+  newClip : function(trackId) {
+    return {
+      parentTrackId : trackId,
+      leftPx : 0,
+      widthPx : 200
+    };
+  },
 };
 
 State = {
@@ -105,10 +115,17 @@ if (Meteor.isClient) {
   Template.editor.activeSequenceId = State.getActiveSequenceId;
   Template.editor.recording = function() {
     return Session.get('recording');
-  }
+  };
   Template.editor.recorderStatus = function() {
     return Session.get('recorderStatusText');
-  }
+  };
+  Template.editor.tracks = function() {
+    return Data.Tracks.find({ parentSequenceId : State.getActiveSequenceId() });
+  };
+  Template.editor.clips = function() {
+    var parentTrack = this;
+    return Data.Clips.find({ parentTrackId : parentTrack._id });
+  };
 
   Template.editor.events({
     'click .btn.start-recording' : function() {
@@ -116,6 +133,13 @@ if (Meteor.isClient) {
     },
     'click .btn.stop-recording' : function() {
       Recorder.stopRecording();
+    },
+    'click .btn.add-track' : function() {
+      Data.Tracks.insert(Data.newTrack(State.getActiveSequenceId()));
+    },
+    'click .btn.add-clip' : function() {
+      var parentTrack = this;
+      Data.Clips.insert(Data.newClip(parentTrack._id));
     }
   });
 }

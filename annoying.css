@@ -2,3 +2,19 @@
 
 button:focus { outline: 0 !important; }
 h4.recorder-status { display: inline-block; }
+
+.tracks {
+  overflow-x: scroll;
+  width: 100%;
+}
+
+.track {
+  border: 1px solid black;
+  height: 50px;
+  position: relative;
+}
+
+.clip {
+  display: inline-block;
+  position: absolute;
+}
