@@ -1,4 +1,9 @@
+// TODO put collections here (equiv to tables)
+
 if (Meteor.isClient) {
+
+  Template.body.githubURL = "http://github.com/mturley/annoying";
+
   Template.hello.greeting = function () {
     return "Welcome to annoying.";
   };
